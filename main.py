@@ -73,7 +73,7 @@ def search():
                                 message=f"Website: {web}\n "
                                         f"Email: {data[web]['email']}\n Password: {data[web]['password']}")
         else:
-            messagebox.showinfo(title='Oops', message=f"Web not found")
+            messagebox.showinfo(title='Oops', message=f"Web {web} not found")
 
 
 
