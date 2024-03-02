@@ -1,7 +1,9 @@
+import tkinter
 from tkinter import *
 from tkinter import messagebox
 from random import choice, randint, shuffle
 import pyperclip
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 #Password Generator Project
@@ -27,22 +29,37 @@ def generate_password():
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
     website = web_entry.get()
-    email_info = email_entry.get()
+    email = email_entry.get()
     password = password_entry.get()
+    new_data = {
+        website: {
+            'email': email,
+            'password':  password
+        }
+    }
 
-    if len(website) == 0 or len(email_info) == 0 or len(password) == 0:
+    if len(website) == 0 or len(email) == 0 or len(password) == 0:
         messagebox.showinfo(title='Oops', message="Please, make sure you haven't left any field empty")
     else:
-        is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered: \n Email: {email_info} "
-                               f"\n Password: {password}\n Is it ok to save?")
+        try:
+            with open('data.json', 'r') as data_file:
+                #Reading old data
+                data = json.load(data_file)
+                #Updating with new data
+                data.update(new_data)
+        except FileNotFoundError:
+            with open('data.json', 'w') as data_file:
+                #Writing all data
+                json.dump(new_data, data_file, indent=4)
+        else:
+            with open('data.json', 'w') as data_file:
+                #Writing all data
+                json.dump(data, data_file, indent=4)
+        finally:
+            web_entry.delete(0, END)
+            password_entry.delete(0, END)
+            messagebox.showinfo(title='Success', message='Information added successfully')
 
-        if is_ok:
-            with open('personal information.txt', 'a') as data_file:
-                data_file.writelines(f'{website}|{email_info}|{password} \n')
-                web_entry.delete(0, END)
-                password_entry.delete(0, END)
-
-                messagebox.showinfo(title='Success', message='Information added successfully')
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -56,24 +73,24 @@ canvas.create_image(100, 100, image=lock_image)
 canvas.grid(column=1, row=0, padx=0)
 
 #webiste label
-web_label = Label(text='Website:')
+web_label = Label(text='Website:', )
 
 #Email/Username label
-email_label = Label(text='Email/Username:')
+email_label = Label(text='Email/Username:', )
 
 # Password label
 password_label = Label(text='Password:')
 
 # Web Entry
-web_entry = Entry(width=35)
+web_entry = Entry(width=51)
 web_entry.focus()
 
 #Email Entry
-email_entry = Entry(width=35)
+email_entry = Entry(width=51)
 email_entry.insert(0,'luisrv@hotmail.com')
 
 # Password Entry
-password_entry = Entry(width=21)
+password_entry = Entry(width=30)
 password_entry.config()
 
 #Generate Password button
@@ -85,15 +102,11 @@ add_button = Button(text='Add', width=36, command=save)
 web_label.grid(column=0, row=1)
 email_label.grid(column=0, row=2, padx=0)
 password_label.grid(column=0, row=3, padx=0)
-web_entry.grid(column=1, row=1, columnspan=2)
-email_entry.grid(column=1, row=2, columnspan=2)
-password_entry.grid(column=1, row=3)
-gen_pass.grid(column=2, row=3)
+web_entry.grid(column=1, row=1, columnspan=2, sticky=tkinter.W, padx=5)
+email_entry.grid(column=1, row=2, columnspan=2, sticky=tkinter.W, padx=5)
+password_entry.grid(column=1, row=3, sticky=tkinter.W, padx=5)
+gen_pass.grid(column=2, row=3, sticky=tkinter.W)
 add_button.grid(column=1, row=4, columnspan=2)
-
-
-
-
 
 
 window.mainloop()
