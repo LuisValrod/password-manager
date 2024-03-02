@@ -28,7 +28,7 @@ pip install tkinter pyperclip
 ### Use the application interface to generate passwords, save credentials, and search for saved credentials.
 
 ## Screenshots
-<img align='right' src="./UI.png">
+<img src="./UI.png" width=200>
 
 ## Contributors
 - Luis Rodriguez Valido
