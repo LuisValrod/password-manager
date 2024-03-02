@@ -74,6 +74,8 @@ def search():
                                         f"Email: {data[web]['email']}\n Password: {data[web]['password']}")
         else:
             messagebox.showinfo(title='Oops', message=f"Web {web} not found")
+    finally:
+        web_entry.delete(0, END)
 
 
 
