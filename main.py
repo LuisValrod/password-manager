@@ -60,6 +60,22 @@ def save():
             password_entry.delete(0, END)
             messagebox.showinfo(title='Success', message='Information added successfully')
 
+def search():
+    web = web_entry.get()
+    try:
+        with open('data.json', 'r') as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title='Oops', message="The file with the data doesn't exist. Try to save some data first")
+    else:
+        if web in data:
+            messagebox.showinfo(title='Success',
+                                message=f"Website: {web}\n "
+                                        f"Email: {data[web]['email']}\n Password: {data[web]['password']}")
+        else:
+            messagebox.showinfo(title='Oops', message=f"Web not found")
+
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -82,7 +98,7 @@ email_label = Label(text='Email/Username:', )
 password_label = Label(text='Password:')
 
 # Web Entry
-web_entry = Entry(width=51)
+web_entry = Entry(width=30)
 web_entry.focus()
 
 #Email Entry
@@ -95,6 +111,10 @@ password_entry.config()
 
 #Generate Password button
 gen_pass  = Button(text='Generate Password', command=generate_password)
+
+# Search Button
+search_button = Button(text='Search', width=14, command=search)#
+search_button.grid(column=2, row=1, sticky=tkinter.W)
 
 # Add button
 add_button = Button(text='Add', width=36, command=save)
